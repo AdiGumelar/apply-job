@@ -228,6 +228,7 @@
                                     <button
                                         class="btn btn-light btn-sm"
                                         type="button"
+                                        @click="downloadCoverLetter(file)"
                                     >
                                         <i class="bi bi-download me-1"></i>
                                         Download
@@ -235,6 +236,7 @@
                                     <button
                                         class="btn btn-outline-danger btn-sm"
                                         type="button"
+                                        @click="deleteCoverLetter(file)"
                                     >
                                         <i class="bi bi-trash3 me-1"></i>
                                         Hapus
@@ -242,6 +244,7 @@
                                     <button
                                         class="btn btn-outline-primary btn-sm"
                                         type="button"
+                                        @click="setDefaultCoverLetter(file)"
                                     >
                                         <i class="bi bi-star me-1"></i>
                                         Jadikan Default
@@ -380,30 +383,6 @@ const placeholders = [
     "{{today}}",
 ];
 
-const letterFiles = [
-    {
-        id: "letter-formal",
-        name: "Surat_Lamaran_Formal.pdf",
-        size: "840 KB",
-        uploadedAt: "01 Jul 2026",
-        isDefault: true,
-    },
-    {
-        id: "letter-modern",
-        name: "Cover_Letter_Modern.pdf",
-        size: "1.1 MB",
-        uploadedAt: "29 Jun 2026",
-        isDefault: false,
-    },
-    {
-        id: "letter-fresh",
-        name: "Surat_Lamaran_Fresh_Graduate.pdf",
-        size: "720 KB",
-        uploadedAt: "25 Jun 2026",
-        isDefault: false,
-    },
-];
-
 //=================== Format Tanggal ===================//
 const formatDate = (date) => {
     return new Date(date).toLocaleDateString("id-ID", {
@@ -506,10 +485,6 @@ const fetchTemplates = async () => {
     }
 };
 
-onMounted(() => {
-    fetchTemplates();
-});
-
 //=================== Tampilkan Template Email ===================//
 
 //=================== Set Default Email ===================//
@@ -593,6 +568,7 @@ const saveCoverLetter = async () => {
                 text: "Harap pilih file PDF untuk diunggah.",
             });
         }
+        showCoverLetters();
     } catch (error) {
         Swal.fire({
             icon: "error",
@@ -602,4 +578,102 @@ const saveCoverLetter = async () => {
     }
 };
 //=================== Simpan Surat Lamaran Template ===================//
+
+//=================== Tampilkan Surat Lamaran Template ===================//
+
+const letterFiles = ref([]);
+
+const showCoverLetters = async () => {
+    try {
+        const response = await api.get("/templatesCoverLetter");
+        letterFiles.value = response.data.data.map((file) => ({
+            id: file.id,
+            name: file.name,
+            size: (file.file_size / 1024).toFixed(2) + " KB",
+            uploadedAt: new Date(file.created_at).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+            }),
+            isDefault: file.is_default,
+        }));
+    } catch (error) {
+        console.error("Error fetching cover letters:", error);
+    }
+};
+
+//=================== Tampilkan Surat Lamaran Template ===================//
+
+//=================== Delete Surat Lamaran Template ===================//
+
+const deleteCoverLetter = async (file) => {
+    try {
+        await api.delete(`/templatesCoverLetter/${file.id}`);
+        await showCoverLetters();
+        Swal.fire({
+            title: "Berhasil!",
+            text: "Surat lamaran berhasil dihapus",
+            icon: "success",
+        });
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Terjadi kesalahan saat menghapus surat lamaran. Silakan coba lagi.",
+        });
+    }
+};
+
+//=================== Delete Surat Lamaran Template ===================//
+
+//=================== Set Default Surat Lamaran Template ===================//
+
+const setDefaultCoverLetter = async (file) => {
+    try {
+        await api.put(`/templatesCoverLetter/${file.id}/set-default`);
+        await showCoverLetters();
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Terjadi kesalahan saat menjadikan surat lamaran default.",
+        });
+    }
+};
+
+//=================== Set Default Surat Lamaran Template ===================//
+
+//=================== Download Surat Lamaran Template ===================//
+
+const downloadCoverLetter = async (file) => {
+    try {
+        const response = await api.get(
+            `/templatesCoverLetter/${file.id}/download`,
+            {
+                responseType: "blob",
+            },
+        );
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", file.name);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Terjadi kesalahan saat mengunduh surat lamaran. Silakan coba lagi.",
+        });
+    }
+};
+
+//=================== Download Surat Lamaran Template ===================//
+
+onMounted(() => {
+    fetchTemplates();
+    showCoverLetters();
+});
 </script>

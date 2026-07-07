@@ -12,3 +12,7 @@ Route::put('/templatesEmail/{id}', [TemplateController::class, 'updateEmail']);
 
 //Template Surat Lamaran routes
 Route::post('/templatesCoverLetter', [TemplateController::class, 'storeCoverLetter']);
+Route::get('/templatesCoverLetter', [TemplateController::class, 'showCoverLetters']);
+Route::delete('/templatesCoverLetter/{id}', [TemplateController::class, 'destroyCoverLetter']);
+Route::put('/templatesCoverLetter/{id}/set-default', [TemplateController::class, 'setDefaultCoverLetter']);
+Route::get('/templatesCoverLetter/{id}/download', [TemplateController::class, 'downloadCoverLetter']);

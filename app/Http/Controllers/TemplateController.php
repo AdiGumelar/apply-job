@@ -88,4 +88,41 @@ class TemplateController extends Controller
 
         return response()->json(['message' => 'Template berhasil disimpan.', 'data' => $saveAttachments], 201 );
     }
+
+    public function showCoverLetters()
+    {
+        $attachments = Attachments::where('type', 'cover_letter')->get();
+        return response()->json(['data' => $attachments, 'message' => 'Template surat lamaran berhasil ditampilkan.']);
+    }
+
+    public function destroyCoverLetter($id)
+    {
+        $attachment = Attachments::findOrFail($id);
+        $attachment->delete();
+
+        return response()->json(['message' => 'Template surat lamaran berhasil dihapus.']);
+    }
+
+    public function setDefaultCoverLetter($id)
+    {
+        Attachments::where('user_id', 1)->where('type', 'cover_letter')->update(['is_default' => false]);
+
+        $attachment = Attachments::findOrFail($id);
+        $attachment->is_default = true;
+        $attachment->save();
+
+        return response()->json(['message' => 'Template surat lamaran berhasil dijadikan default.', 'data' => $attachment]);
+    }
+
+    public function downloadCoverLetter($id)
+    {
+        $attachment = Attachments::findOrFail($id);
+        $filePath = storage_path('app/public/' . $attachment->file_path);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['message' => 'File tidak ditemukan.'], 404);
+        }
+
+        return response()->download($filePath, $attachment->name . '.' . pathinfo($attachment->file_path, PATHINFO_EXTENSION));
+    }
 }
