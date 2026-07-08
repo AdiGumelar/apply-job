@@ -76,7 +76,7 @@ class TemplateController extends Controller
 
         $path = $request->file('file')->store('lampiran', 'public');
 
-        $name = pathinfo($validatedData['file']->getClientOriginalName(), PATHINFO_FILENAME);
+        $name = $validatedData['file']->getClientOriginalName();
 
         $saveAttachments = Attachments::create([
             'user_id' => 1,
@@ -98,6 +98,12 @@ class TemplateController extends Controller
     public function destroyCoverLetter($id)
     {
         $attachment = Attachments::findOrFail($id);
+        $filePath = storage_path('app/public/' . $attachment->file_path);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
         $attachment->delete();
 
         return response()->json(['message' => 'Template surat lamaran berhasil dihapus.']);
@@ -123,6 +129,6 @@ class TemplateController extends Controller
             return response()->json(['message' => 'File tidak ditemukan.'], 404);
         }
 
-        return response()->download($filePath, $attachment->name . '.' . pathinfo($attachment->file_path, PATHINFO_EXTENSION));
+        return response()->download($filePath, $attachment->name);
     }
 }

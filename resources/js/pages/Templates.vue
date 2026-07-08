@@ -544,17 +544,13 @@ const handleFileUpload = (event) => {
 const saveCoverLetter = async () => {
     try {
         if (letterForm.value) {
-            const response = await api.post(
-                "/templatesCoverLetter",
-                {
-                    file: letterForm.value,
+            const formData = new FormData();
+            formData.append("file", letterForm.value);
+            const response = await api.post("/templatesCoverLetter", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
                 },
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                },
-            );
+            });
 
             Swal.fire({
                 title: "Berhasil!",
@@ -645,29 +641,8 @@ const setDefaultCoverLetter = async (file) => {
 
 //=================== Download Surat Lamaran Template ===================//
 
-const downloadCoverLetter = async (file) => {
-    try {
-        const response = await api.get(
-            `/templatesCoverLetter/${file.id}/download`,
-            {
-                responseType: "blob",
-            },
-        );
-
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", file.name);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    } catch (error) {
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Terjadi kesalahan saat mengunduh surat lamaran. Silakan coba lagi.",
-        });
-    }
+const downloadCoverLetter = (file) => {
+    window.location.href = `http://127.0.0.1:8000/api/templatesCoverLetter/${file.id}/download`;
 };
 
 //=================== Download Surat Lamaran Template ===================//
