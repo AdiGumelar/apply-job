@@ -434,7 +434,6 @@ const saveTemplateEmail = async () => {
                 subject: form.subject,
                 content: form.content,
             });
-            console.log("Template saved:", response.data);
             form.name = "";
             form.subject = "";
             form.content = "";

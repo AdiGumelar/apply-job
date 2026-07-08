@@ -22,7 +22,7 @@ return new class extends Migration
 
         $table->enum('type', [
             'cv',
-            'cover_letter',
+            'surat_lamaran',
             'portfolio',
             'certificate',
             'transcript',

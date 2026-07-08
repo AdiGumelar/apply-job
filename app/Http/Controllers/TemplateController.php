@@ -81,7 +81,7 @@ class TemplateController extends Controller
         $saveAttachments = Attachments::create([
             'user_id' => 1,
             'name' => $name,
-            'type' => 'cover_letter',
+            'type' => 'surat_lamaran',
             'file_path' => $path,
             'file_size' => $validatedData['file']->getSize(),
         ]);
@@ -91,7 +91,7 @@ class TemplateController extends Controller
 
     public function showCoverLetters()
     {
-        $attachments = Attachments::where('type', 'cover_letter')->get();
+        $attachments = Attachments::where('type', 'surat_lamaran')->get();
         return response()->json(['data' => $attachments, 'message' => 'Template surat lamaran berhasil ditampilkan.']);
     }
 
@@ -111,7 +111,7 @@ class TemplateController extends Controller
 
     public function setDefaultCoverLetter($id)
     {
-        Attachments::where('user_id', 1)->where('type', 'cover_letter')->update(['is_default' => false]);
+        Attachments::where('user_id', 1)->where('type', 'surat_lamaran')->update(['is_default' => false]);
 
         $attachment = Attachments::findOrFail($id);
         $attachment->is_default = true;

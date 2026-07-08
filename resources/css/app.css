@@ -1822,12 +1822,21 @@ input {
 }
 
 .attachment-default-badge {
-    background: rgba(16, 185, 129, 0.14);
-    color: #047857;
+    background: #059669;
+    color: #fff;
+    border: 1px solid #047857;
+    box-shadow: 0 8px 16px rgba(5, 150, 105, 0.2);
 }
 
 .attachment-empty-default {
-    color: var(--app-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #64748b;
     font-weight: 800;
 }
 
@@ -1975,6 +1984,30 @@ input {
     box-shadow: 0 0 0 0.22rem rgba(79, 70, 229, 0.12);
 }
 
+.attachment-upload-modal {
+    --bs-modal-margin: 1rem;
+    z-index: 1060;
+}
+
+.attachment-upload-modal .modal-dialog {
+    min-height: calc(100vh - 2rem);
+}
+
+.attachment-upload-modal .premium-modal {
+    background: #fff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    box-shadow: 0 28px 90px rgba(15, 23, 42, 0.34);
+}
+
+.attachment-upload-modal .modal-header,
+.attachment-upload-modal .modal-footer {
+    background: #fff;
+}
+
+.modal-backdrop.show {
+    opacity: 0.62;
+}
+
 .attachment-modal-upload {
     display: grid;
     place-items: center;
@@ -2008,6 +2041,66 @@ input {
     background: #fff;
     transform: translateY(-3px);
     box-shadow: var(--app-shadow-soft);
+}
+
+.attachment-modal-upload.is-file-ready {
+    grid-template-columns: auto minmax(0, 1fr);
+    place-items: stretch;
+    align-items: center;
+    justify-content: start;
+    gap: 14px;
+    border-color: rgba(16, 185, 129, 0.55);
+    background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+    color: #065f46;
+    text-align: left;
+}
+
+.attachment-modal-upload.is-file-ready:hover {
+    border-color: #10b981;
+    background: #fff;
+}
+
+.attachment-ready-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    background: #10b981;
+    color: #fff;
+    box-shadow: 0 14px 28px rgba(16, 185, 129, 0.24);
+}
+
+.attachment-ready-icon i {
+    color: #fff;
+    font-size: 1.55rem;
+}
+
+.attachment-ready-copy {
+    display: grid;
+    min-width: 0;
+    gap: 4px;
+}
+
+.attachment-ready-copy strong {
+    overflow: hidden;
+    color: #064e3b;
+    font-size: 0.98rem;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attachment-ready-copy small,
+.attachment-ready-hint {
+    color: #047857;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.attachment-ready-hint {
+    grid-column: 2;
 }
 
 .attachment-default-check {

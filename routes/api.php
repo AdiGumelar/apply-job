@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\Attachment;
 
 //Template Email routes
 Route::get('/templatesEmail', [TemplateController::class, 'showEmails']);
@@ -16,3 +17,7 @@ Route::get('/templatesCoverLetter', [TemplateController::class, 'showCoverLetter
 Route::delete('/templatesCoverLetter/{id}', [TemplateController::class, 'destroyCoverLetter']);
 Route::put('/templatesCoverLetter/{id}/set-default', [TemplateController::class, 'setDefaultCoverLetter']);
 Route::get('/templatesCoverLetter/{id}/download', [TemplateController::class, 'downloadCoverLetter']);
+
+//Lampiran routes
+Route::get('/attachments', [Attachment::class, 'showAttachments']);
+Route::post('/attachments', [Attachment::class, 'storeAttachments']);
