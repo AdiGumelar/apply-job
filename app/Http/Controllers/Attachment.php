@@ -7,6 +7,13 @@ use App\Models\Attachments;
 
 class Attachment extends Controller
 {
+
+    public function showAttachments()
+    {
+        $attachments = Attachments::orderBy('created_at', 'desc')->paginate(10);
+        return response()->json($attachments);
+    }
+
     public function storeAttachments(Request $request)
     {
         $validatedData = $request->validate([

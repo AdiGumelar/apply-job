@@ -68,7 +68,7 @@
             </div>
 
             <div
-                v-else-if="filteredAttachments.length === 0"
+                v-else-if="attachments.length === 0"
                 class="attachment-empty-state"
             >
                 <div class="attachment-empty-icon">
@@ -98,7 +98,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                v-for="attachment in filteredAttachments"
+                                v-for="attachment in attachments"
                                 :key="attachment.id"
                             >
                                 <td>
@@ -166,22 +166,54 @@
                     aria-label="Pagination lampiran"
                 >
                     <ul class="pagination mb-0">
-                        <li class="page-item disabled">
-                            <button class="page-link" type="button">
+                        <li
+                            class="page-item"
+                            :class="{ disabled: !pagination.prev_page_url }"
+                        >
+                            <button
+                                class="page-link"
+                                type="button"
+                                @click="
+                                    fetchAttachments(
+                                        pagination.current_page - 1,
+                                    )
+                                "
+                                :disabled="!pagination.prev_page_url"
+                            >
                                 Previous
                             </button>
                         </li>
-                        <li class="page-item active" aria-current="page">
-                            <button class="page-link" type="button">1</button>
+                        <li
+                            class="page-item"
+                            aria-current="page"
+                            v-for="page in pagination.last_page"
+                            :key="page"
+                            :class="{
+                                active: page === pagination.current_page,
+                            }"
+                        >
+                            <button
+                                class="page-link"
+                                type="button"
+                                @click="fetchAttachments(page)"
+                            >
+                                {{ page }}
+                            </button>
                         </li>
-                        <li class="page-item">
-                            <button class="page-link" type="button">2</button>
-                        </li>
-                        <li class="page-item">
-                            <button class="page-link" type="button">3</button>
-                        </li>
-                        <li class="page-item">
-                            <button class="page-link" type="button">
+                        <li
+                            class="page-item"
+                            :class="{ disabled: !pagination.next_page_url }"
+                        >
+                            <button
+                                class="page-link"
+                                type="button"
+                                @click="
+                                    fetchAttachments(
+                                        pagination.current_page + 1,
+                                    )
+                                "
+                                :disabled="!pagination.next_page_url"
+                            >
                                 Next
                             </button>
                         </li>
@@ -365,7 +397,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 
 const searchKeyword = ref("");
 const selectedType = ref("Semua");
@@ -382,85 +414,24 @@ const filterTypes = [
 ];
 const uploadTypes = ["CV", "Portfolio", "Certificate", "Transcript", "Other"];
 
-const attachments = [
-    {
-        id: 1,
-        name: "CV_Ari_Recruiter_2026.pdf",
-        type: "CV",
-        size: "1.8 MB",
-        uploadedAt: "01 Jul 2026",
-        isDefault: true,
-        icon: "bi bi-file-person-fill",
-    },
-    {
-        id: 2,
-        name: "Surat_Lamaran_Formal.pdf",
-        type: "Surat Lamaran",
-        size: "840 KB",
-        uploadedAt: "01 Jul 2026",
-        isDefault: true,
-        icon: "bi bi-file-earmark-pdf-fill",
-    },
-    {
-        id: 3,
-        name: "Portfolio_Frontend.pdf",
-        type: "Portfolio",
-        size: "4.6 MB",
-        uploadedAt: "30 Jun 2026",
-        isDefault: true,
-        icon: "bi bi-kanban-fill",
-    },
-    {
-        id: 4,
-        name: "Sertifikat_Vue_Laravel.pdf",
-        type: "Sertifikat",
-        size: "980 KB",
-        uploadedAt: "25 Jun 2026",
-        isDefault: false,
-        icon: "bi bi-award-fill",
-    },
-    {
-        id: 5,
-        name: "Transkrip_Akademik.pdf",
-        type: "Transkrip",
-        size: "1.1 MB",
-        uploadedAt: "20 Jun 2026",
-        isDefault: false,
-        icon: "bi bi-mortarboard-fill",
-    },
-    {
-        id: 6,
-        name: "Referensi_Project.zip",
-        type: "Other",
-        size: "6.2 MB",
-        uploadedAt: "18 Jun 2026",
-        isDefault: false,
-        icon: "bi bi-file-zip-fill",
-    },
-];
-
 const typeClassMap = {
     CV: "type-cv",
+    cv: "type-cv",
     "Surat Lamaran": "type-letter",
+    surat_lamaran: "type-letter",
     Portfolio: "type-portfolio",
+    portfolio: "type-portfolio",
     Sertifikat: "type-certificate",
+    sertifikat: "type-certificate",
+    Certificate: "type-certificate",
+    certificate: "type-certificate",
     Transkrip: "type-transcript",
+    transkrip: "type-transcript",
+    Transcript: "type-transcript",
+    transcript: "type-transcript",
     Other: "type-other",
+    other: "type-other",
 };
-
-const filteredAttachments = computed(() => {
-    const keyword = searchKeyword.value.toLowerCase().trim();
-
-    return attachments.filter((attachment) => {
-        const matchesKeyword =
-            !keyword || attachment.name.toLowerCase().includes(keyword);
-        const matchesType =
-            selectedType.value === "Semua" ||
-            attachment.type === selectedType.value;
-
-        return matchesKeyword && matchesType;
-    });
-});
 
 const typeClass = (type) => typeClassMap[type] || "type-other";
 
@@ -520,6 +491,7 @@ const saveAttachment = async () => {
             text: "Lampiran berhasil diunggah",
             icon: "success",
         });
+        fetchAttachments();
     } catch (error) {
         console.error("Error uploading attachment:", error);
         Swal.fire({
@@ -531,4 +503,54 @@ const saveAttachment = async () => {
 };
 
 //==========================Simpan Lampiran==========================
+
+//==========================Tampilkan Lampiran==========================
+
+const attachments = ref([]);
+const pagination = ref({});
+
+const fetchAttachments = async (page = 1) => {
+    isLoading.value = true;
+    try {
+        const response = await api.get(`/attachments?page=${page}`);
+        attachments.value = response.data.data.map((att) => ({
+            id: att.id,
+            name: att.name,
+            size: (att.file_size / 1024).toFixed(2) + " KB",
+            type: att.type,
+            uploadedAt: new Date(att.created_at).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+            }),
+            isDefault: att.is_default,
+            icon:
+                att.type === "cv"
+                    ? "bi bi-file-earmark-person-fill"
+                    : att.type === "surat_lamaran"
+                      ? "bi bi-file-earmark-text-fill"
+                      : att.type === "portfolio"
+                        ? "bi bi-folder-fill"
+                        : att.type === "sertifikat"
+                          ? "bi bi-award-fill"
+                          : att.type === "transkrip"
+                            ? "bi bi-journal-text"
+                            : "bi bi-file-earmark-fill",
+        }));
+        pagination.value = response.data;
+    } catch (error) {
+        Swal.fire({
+            title: "Gagal!",
+            text: "Terjadi kesalahan saat mengambil data lampiran",
+            icon: "error",
+        });
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+onMounted(() => {
+    fetchAttachments();
+});
+//==========================Tampilkan Lampiran==========================
 </script>
