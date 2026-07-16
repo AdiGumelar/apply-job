@@ -21,3 +21,5 @@ Route::get('/templatesCoverLetter/{id}/download', [TemplateController::class, 'd
 //Lampiran routes
 Route::get('/attachments', [Attachment::class, 'showAttachments']);
 Route::post('/attachments', [Attachment::class, 'storeAttachments']);
+Route::delete('/attachments/{id}', [Attachment::class, 'destroyAttachments']);
+Route::put('/attachments/{id}/set-default', [Attachment::class, 'setDefaultAttachment']);

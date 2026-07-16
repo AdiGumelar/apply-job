@@ -37,4 +37,28 @@ class Attachment extends Controller
 
         return response()->json(['message' => 'Lampiran berhasil disimpan.', 'data' => $saveAttachments], 201);
     }
+
+    public function destroyAttachments($id)
+    {
+        $attachment = Attachments::findOrFail($id);
+        $filePath = storage_path('app/public/' . $attachment->file_path);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $attachment->delete();
+
+        return response()->json(['message' => 'Lampiran berhasil dihapus.']);
+    }
+
+    public function setDefaultAttachment($id)
+    {
+
+        $attachment = Attachments::findOrFail($id);
+        $attachment->is_default = true;
+        $attachment->save();
+
+        return response()->json(['message' => 'Lampiran berhasil dijadikan default.']);
+    }
 }

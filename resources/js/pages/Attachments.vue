@@ -150,6 +150,9 @@
                                         <button
                                             class="btn btn-outline-danger btn-sm"
                                             type="button"
+                                            @click="
+                                                deleteAttachment(attachment.id)
+                                            "
                                         >
                                             <i class="bi bi-trash3 me-1"></i>
                                             Hapus
@@ -553,4 +556,36 @@ onMounted(() => {
     fetchAttachments();
 });
 //==========================Tampilkan Lampiran==========================
+
+//==========================Hapus Lampiran==========================
+const deleteAttachment = async (id) => {
+    try {
+        const result = await Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Lampiran yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+        });
+
+        if (result.isConfirmed) {
+            await api.delete(`/attachments/${id}`);
+            Swal.fire({
+                title: "Berhasil!",
+                text: "Lampiran berhasil dihapus",
+                icon: "success",
+            });
+            fetchAttachments();
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "Gagal!",
+            text: "Terjadi kesalahan saat menghapus lampiran",
+            icon: "error",
+        });
+    }
+};
+
+//==========================Hapus Lampiran==========================
 </script>
