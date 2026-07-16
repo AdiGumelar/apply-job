@@ -61,4 +61,13 @@ class Attachment extends Controller
 
         return response()->json(['message' => 'Lampiran berhasil dijadikan default.']);
     }
+
+    public function removeDefaultAttachment($id)
+    {
+        $attachment = Attachments::findOrFail($id);
+        $attachment->is_default = false;
+        $attachment->save();
+
+        return response()->json(['message' => 'Lampiran berhasil dihapus dari default.']);
+    }   
 }

@@ -141,11 +141,30 @@
                                             Download
                                         </button>
                                         <button
+                                            v-if="!attachment.isDefault"
                                             class="btn btn-outline-primary btn-sm"
                                             type="button"
+                                            @click="
+                                                setDefaultAttachment(
+                                                    attachment.id,
+                                                )
+                                            "
                                         >
                                             <i class="bi bi-star me-1"></i>
                                             Jadikan Default
+                                        </button>
+                                        <button
+                                            v-else
+                                            class="btn btn-outline-primary btn-sm"
+                                            type="button"
+                                            @click="
+                                                removeDefaultAttachment(
+                                                    attachment.id,
+                                                )
+                                            "
+                                        >
+                                            <i class="bi bi-star me-1"></i>
+                                            Hapus Default
                                         </button>
                                         <button
                                             class="btn btn-outline-danger btn-sm"
@@ -588,4 +607,44 @@ const deleteAttachment = async (id) => {
 };
 
 //==========================Hapus Lampiran==========================
+
+//==========================Jadikan Default Lampiran==========================
+const setDefaultAttachment = async (id) => {
+    try {
+        await api.put(`/attachments/${id}/set-default`);
+        Swal.fire({
+            title: "Berhasil!",
+            text: "Lampiran berhasil dijadikan default",
+            icon: "success",
+        });
+        fetchAttachments();
+    } catch (error) {
+        Swal.fire({
+            title: "Gagal!",
+            text: "Terjadi kesalahan saat menjadikan lampiran default",
+            icon: "error",
+        });
+    }
+};
+//==========================Jadikan Default Lampiran==========================
+
+//==========================Hapus Default Lampiran==========================
+const removeDefaultAttachment = async (id) => {
+    try {
+        await api.put(`/attachments/${id}/destroy-default`);
+        Swal.fire({
+            title: "Berhasil!",
+            text: "Lampiran berhasil dihapus sebagai default",
+            icon: "success",
+        });
+        fetchAttachments();
+    } catch (error) {
+        Swal.fire({
+            title: "Gagal!",
+            text: "Terjadi kesalahan saat menghapus lampiran default",
+            icon: "error",
+        });
+    }
+};
+//==========================Hapus Default Lampiran==========================
 </script>
