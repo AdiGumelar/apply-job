@@ -136,6 +136,9 @@
                                         <button
                                             class="btn btn-light btn-sm"
                                             type="button"
+                                            @click="
+                                                downloadAttachment(attachment)
+                                            "
                                         >
                                             <i class="bi bi-download me-1"></i>
                                             Download
@@ -647,4 +650,10 @@ const removeDefaultAttachment = async (id) => {
     }
 };
 //==========================Hapus Default Lampiran==========================
+
+//==========================Download Lampiran==========================
+const downloadAttachment = (file) => {
+    window.location.href = `http://127.0.0.1:8000/api/attachments/${file.id}/download`;
+};
+//==========================Download Lampiran==========================
 </script>

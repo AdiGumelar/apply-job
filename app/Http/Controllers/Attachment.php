@@ -70,4 +70,16 @@ class Attachment extends Controller
 
         return response()->json(['message' => 'Lampiran berhasil dihapus dari default.']);
     }   
+
+    public function downloadAttachment($id)
+    {
+        $attachment = Attachments::findOrFail($id);
+        $filePath = storage_path('app/public/' . $attachment->file_path);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['message' => 'File tidak ditemukan.'], 404);
+        }
+
+        return response()->download($filePath, $attachment->name);  
+    }
 }

@@ -24,3 +24,4 @@ Route::post('/attachments', [Attachment::class, 'storeAttachments']);
 Route::delete('/attachments/{id}', [Attachment::class, 'destroyAttachments']);
 Route::put('/attachments/{id}/set-default', [Attachment::class, 'setDefaultAttachment']);
 Route::put('/attachments/{id}/destroy-default', [Attachment::class, 'removeDefaultAttachment']);
+Route::get('/attachments/{id}/download', [Attachment::class, 'downloadAttachment']);    
