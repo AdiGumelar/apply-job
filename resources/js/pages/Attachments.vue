@@ -31,7 +31,7 @@
                     <div class="attachment-search-input">
                         <i class="bi bi-search"></i>
                         <input
-                            v-model="searchKeyword"
+                            v-model="search"
                             type="search"
                             class="form-control attachment-control"
                             placeholder="Cari nama file..."
@@ -422,10 +422,8 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted, watch } from "vue";
 
-const searchKeyword = ref("");
-const selectedType = ref("Semua");
 const isLoading = ref(false);
 
 const filterTypes = [
@@ -531,13 +529,23 @@ const saveAttachment = async () => {
 
 //==========================Tampilkan Lampiran==========================
 
+import { debounce } from "lodash";
+
 const attachments = ref([]);
 const pagination = ref({});
+const search = ref("");
+const selectedType = ref("Semua");
 
 const fetchAttachments = async (page = 1) => {
     isLoading.value = true;
     try {
-        const response = await api.get(`/attachments?page=${page}`);
+        const response = await api.get(`/attachments`, {
+            params: {
+                page: page,
+                search: search.value,
+                type: selectedType.value !== "Semua" ? selectedType.value : "",
+            },
+        });
         attachments.value = response.data.data.map((att) => ({
             id: att.id,
             name: att.name,
@@ -577,6 +585,13 @@ const fetchAttachments = async (page = 1) => {
 onMounted(() => {
     fetchAttachments();
 });
+
+watch(
+    [search, selectedType],
+    debounce(() => {
+        fetchAttachments();
+    }, 500),
+);
 //==========================Tampilkan Lampiran==========================
 
 //==========================Hapus Lampiran==========================

@@ -8,9 +8,24 @@ use App\Models\Attachments;
 class Attachment extends Controller
 {
 
-    public function showAttachments()
+    public function showAttachments(Request $request)
     {
-        $attachments = Attachments::orderBy('created_at', 'desc')->paginate(10);
+        $query = $request->input('search');
+        $type = $request->input('type');
+        if ($type) {
+            $attachments = Attachments::where('type', $type)
+                ->where(function ($q) use ($query) {
+                    $q->where('name', 'like', '%' . $query . '%')
+                      ->orWhere('type', 'like', '%' . $query . '%');
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } else {
+            $attachments = Attachments::where('name', 'like', '%' . $query . '%')
+                ->orWhere('type', 'like', '%' . $query . '%')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        }
         return response()->json($attachments);
     }
 
