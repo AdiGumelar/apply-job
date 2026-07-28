@@ -910,6 +910,43 @@ input {
     gap: 14px;
 }
 
+.apply-attachment-empty {
+    display: grid;
+    place-items: center;
+    min-height: 260px;
+    padding: 28px 20px;
+    border: 1px dashed var(--app-border);
+    border-radius: 18px;
+    background: #f8fafc;
+    color: var(--app-muted);
+    text-align: center;
+}
+
+.apply-attachment-empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 12px;
+    border-radius: 18px;
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--app-primary);
+    font-size: 1.5rem;
+}
+
+.apply-attachment-empty h3 {
+    margin-bottom: 6px;
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.apply-attachment-empty p {
+    margin-bottom: 0;
+    font-size: 0.84rem;
+}
+
 .attachment-item {
     position: relative;
     display: flex;

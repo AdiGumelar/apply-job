@@ -161,7 +161,7 @@
                         </span>
                     </div>
 
-                    <div class="attachment-list">
+                    <div v-if="attachments.length" class="attachment-list">
                         <label
                             v-for="attachment in attachments"
                             :key="attachment.id"
@@ -178,6 +178,14 @@
                             </span>
                             <i class="bi bi-check-circle-fill attachment-check"></i>
                         </label>
+                    </div>
+
+                    <div v-else class="apply-attachment-empty">
+                        <span class="apply-attachment-empty-icon">
+                            <i class="bi bi-folder-x"></i>
+                        </span>
+                        <h3>Belum ada lampiran</h3>
+                        <p>Tambahkan dokumen pendukung dari halaman Lampiran terlebih dahulu.</p>
                     </div>
                 </section>
             </div>
