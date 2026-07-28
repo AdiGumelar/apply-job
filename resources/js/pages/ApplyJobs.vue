@@ -238,7 +238,8 @@
 </template>
 
 <script setup>
-import { computed, reactive } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import api from "../services/api";
 
 const form = reactive({
     company: "Mediatama Digital",
@@ -252,40 +253,65 @@ const form = reactive({
 const emailTemplates = ["Profesional Singkat", "Friendly Recruiter", "Follow Up Lamaran"];
 const letterTemplates = ["Surat Lamaran Formal", "Cover Letter Modern", "Fresh Graduate"];
 
-const attachments = reactive([
-    {
-        id: "cv",
+const attachmentTypes = {
+    cv: {
         label: "CV",
-        file: "CV_Ari_Recruiter.pdf",
         icon: "bi bi-file-person-fill",
         variant: "attachment-primary",
-        selected: true,
     },
-    {
-        id: "portfolio",
+    surat_lamaran: {
+        label: "Surat Lamaran",
+        icon: "bi bi-file-earmark-text-fill",
+        variant: "attachment-primary",
+    },
+    portfolio: {
         label: "Portfolio",
-        file: "portfolio-frontend.pdf",
         icon: "bi bi-kanban-fill",
         variant: "attachment-success",
-        selected: true,
     },
-    {
-        id: "certificate",
+    certificate: {
         label: "Sertifikat",
-        file: "sertifikat-vue-laravel.pdf",
         icon: "bi bi-award-fill",
         variant: "attachment-warning",
-        selected: false,
     },
-    {
-        id: "transcript",
+    transcript: {
         label: "Transkrip",
-        file: "transkrip-akademik.pdf",
         icon: "bi bi-mortarboard-fill",
         variant: "attachment-danger",
-        selected: false,
     },
-]);
+    other: {
+        label: "Dokumen Lainnya",
+        icon: "bi bi-file-earmark-fill",
+        variant: "attachment-primary",
+    },
+};
 
-const selectedAttachments = computed(() => attachments.filter((attachment) => attachment.selected));
+const attachments = ref([]);
+
+const fetchAttachments = async () => {
+    try {
+        const response = await api.get("/attachments");
+
+        attachments.value = response.data.data.map((attachment) => {
+            const type = attachmentTypes[attachment.type.toLowerCase()] || attachmentTypes.other;
+
+            return {
+                id: attachment.id,
+                label: type.label,
+                file: attachment.name,
+                icon: type.icon,
+                variant: type.variant,
+                selected: attachment.is_default,
+            };
+        });
+    } catch (error) {
+        console.error("Error fetching attachments:", error);
+    }
+};
+
+onMounted(() => {
+    fetchAttachments();
+});
+
+const selectedAttachments = computed(() => attachments.value.filter((attachment) => attachment.selected));
 </script>
