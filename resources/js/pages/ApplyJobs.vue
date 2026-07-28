@@ -94,13 +94,21 @@
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    <i class="bi bi-chat-left-text"></i>
-                                    <span>{{ form.emailTemplate }}</span>
+                                    <span class="premium-dropdown-content">
+                                        <i class="bi bi-chat-left-text"></i>
+                                        <span>{{ form.emailTemplate }}</span>
+                                    </span>
                                 </button>
                                 <ul class="dropdown-menu premium-dropdown-menu">
                                     <li v-for="template in emailTemplates" :key="template">
-                                        <button class="dropdown-item" type="button" @click="form.emailTemplate = template">
+                                        <button
+                                            class="dropdown-item"
+                                            :class="{ active: form.emailTemplate === template }"
+                                            type="button"
+                                            @click="form.emailTemplate = template"
+                                        >
                                             {{ template }}
+                                            <i v-if="form.emailTemplate === template" class="bi bi-check2"></i>
                                         </button>
                                     </li>
                                 </ul>
@@ -116,13 +124,21 @@
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    <i class="bi bi-file-earmark-richtext"></i>
-                                    <span>{{ form.letterTemplate }}</span>
+                                    <span class="premium-dropdown-content">
+                                        <i class="bi bi-file-earmark-richtext"></i>
+                                        <span>{{ form.letterTemplate }}</span>
+                                    </span>
                                 </button>
                                 <ul class="dropdown-menu premium-dropdown-menu">
                                     <li v-for="template in letterTemplates" :key="template">
-                                        <button class="dropdown-item" type="button" @click="form.letterTemplate = template">
+                                        <button
+                                            class="dropdown-item"
+                                            :class="{ active: form.letterTemplate === template }"
+                                            type="button"
+                                            @click="form.letterTemplate = template"
+                                        >
                                             {{ template }}
+                                            <i v-if="form.letterTemplate === template" class="bi bi-check2"></i>
                                         </button>
                                     </li>
                                 </ul>
