@@ -5,6 +5,7 @@ import ApplyJobs from "../pages/ApplyJobs.vue";
 import Templates from "../pages/Templates.vue";
 import Attachments from "../pages/Attachments.vue";
 import History from "../pages/History.vue";
+import Login from "../pages/Login.vue";
 
 const routes = [
     {
@@ -45,6 +46,15 @@ const routes = [
         component: History,
         meta: {
             title: "Riwayat",
+        },
+    },
+    {
+        path: "/login",
+        name: "login",
+        component: Login,
+        meta: {
+            title: "Login",
+            layout: "blank",
         },
     },
 ];
