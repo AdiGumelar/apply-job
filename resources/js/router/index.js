@@ -6,6 +6,7 @@ import Templates from "../pages/Templates.vue";
 import Attachments from "../pages/Attachments.vue";
 import History from "../pages/History.vue";
 import Login from "../pages/Login.vue";
+import Register from "../pages/Register.vue";
 
 const routes = [
     {
@@ -54,6 +55,15 @@ const routes = [
         component: Login,
         meta: {
             title: "Login",
+            layout: "blank",
+        },
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: Register,
+        meta: {
+            title: "Daftar",
             layout: "blank",
         },
     },

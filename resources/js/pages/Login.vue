@@ -82,56 +82,8 @@
                     Masuk dengan Google
                 </button>
 
-                <p class="login-register">Belum memiliki akun? <a href="#">Daftar sekarang</a></p>
+                <p class="login-register">Belum memiliki akun? <RouterLink to="/register">Daftar sekarang</RouterLink></p>
             </div>
         </section>
     </main>
 </template>
-
-<style scoped>
-.login-page { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(420px, .92fr); min-height: 100vh; background: var(--app-bg); }
-.login-showcase { position: relative; display: flex; flex-direction: column; min-height: 100vh; padding: 42px clamp(36px, 7vw, 108px); overflow: hidden; color: #fff; background: linear-gradient(145deg, #1e293b 0%, #273b63 55%, #4f46e5 145%); }
-.login-showcase::before, .login-showcase::after { position: absolute; border-radius: 999px; content: ""; pointer-events: none; }
-.login-showcase::before { width: 460px; height: 460px; top: -215px; right: -150px; border: 76px solid rgba(129, 140, 248, .16); }
-.login-showcase::after { width: 340px; height: 340px; bottom: -190px; left: -130px; background: rgba(79, 70, 229, .28); }
-.login-brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; }
-.login-brand-mark { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 16px; background: var(--app-primary); color: #fff; font-size: 1.2rem; box-shadow: 0 12px 28px rgba(79, 70, 229, .35); }
-.login-brand strong, .login-brand small { display: block; line-height: 1.2; }
-.login-brand strong { font-size: 1rem; }
-.login-brand small { margin-top: 3px; color: #cbd5e1; font-size: .78rem; font-weight: 500; }
-.login-showcase-copy { position: relative; z-index: 1; max-width: 590px; margin: auto 0 42px; }
-.login-showcase .section-label { color: #a5b4fc; }
-.login-showcase h1 { max-width: 560px; margin: 0 0 20px; font-size: clamp(2.25rem, 4vw, 3.65rem); font-weight: 700; line-height: 1.15; letter-spacing: -.035em; }
-.login-showcase-copy > p:last-child { max-width: 530px; margin: 0; color: #cbd5e1; font-size: 1rem; line-height: 1.8; }
-.login-feature-list { position: relative; z-index: 1; display: grid; gap: 13px; color: #e2e8f0; font-size: .9rem; font-weight: 500; }
-.login-feature-list span { display: inline-flex; align-items: center; gap: 9px; }
-.login-feature-list i { color: #a5b4fc; font-size: 1.05rem; }
-.login-panel { display: grid; place-items: center; padding: 36px; }
-.login-card { width: min(100%, 430px); }
-.login-card-heading h2 { margin: 0 0 10px; color: #0f172a; font-size: clamp(1.7rem, 3vw, 2.15rem); font-weight: 700; line-height: 1.2; }
-.login-card-heading > p:last-child { margin: 0; color: var(--app-muted); font-size: .92rem; line-height: 1.65; }
-.login-mobile-brand { display: none; margin-bottom: 28px; }
-.login-form { display: grid; gap: 20px; margin-top: 32px; }
-.login-form label { display: block; margin-bottom: 8px; color: var(--app-text); font-size: .85rem; font-weight: 700; }
-.login-label-row { display: flex; justify-content: space-between; gap: 16px; }
-.login-label-row a, .login-register a { color: var(--app-primary); font-weight: 700; text-decoration: none; }
-.login-label-row a { font-size: .8rem; }
-.login-input-wrap { position: relative; }
-.login-input-wrap > i { position: absolute; top: 50%; left: 17px; color: var(--app-muted); transform: translateY(-50%); }
-.login-input-wrap input { width: 100%; height: 52px; padding: 0 16px 0 47px; border: 1px solid var(--app-border); border-radius: 16px; outline: 0; background: #f8fafc; color: var(--app-text); font-size: .9rem; transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
-.login-input-wrap input::placeholder { color: #94a3b8; }
-.login-input-wrap input:focus { border-color: var(--app-primary); background: #fff; box-shadow: 0 0 0 .22rem rgba(79, 70, 229, .12); }
-.login-remember { display: inline-flex !important; align-items: center; gap: 9px; width: fit-content; margin: -4px 0 0 !important; cursor: pointer; color: var(--app-muted) !important; font-size: .84rem !important; font-weight: 500 !important; }
-.login-remember input { width: 16px; height: 16px; margin: 0; accent-color: var(--app-primary); }
-.login-submit, .login-google-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border-radius: 16px; font-size: .9rem; font-weight: 700; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-.login-submit { border: 1px solid var(--app-primary); background: var(--app-primary); color: #fff; box-shadow: 0 14px 26px rgba(79, 70, 229, .25); }
-.login-submit:hover { transform: translateY(-2px); background: #4338ca; box-shadow: 0 18px 30px rgba(79, 70, 229, .3); }
-.login-divider { display: flex; align-items: center; gap: 14px; margin: 27px 0; color: #94a3b8; font-size: .76rem; font-weight: 600; }
-.login-divider::before, .login-divider::after { height: 1px; flex: 1; background: var(--app-border); content: ""; }
-.login-google-button { width: 100%; border: 1px solid var(--app-border); background: #fff; color: var(--app-text); }
-.login-google-button:hover { border-color: #cbd5e1; transform: translateY(-2px); box-shadow: var(--app-shadow-soft); }
-.login-google-button svg { width: 19px; height: 19px; }
-.login-register { margin: 28px 0 0; color: var(--app-muted); font-size: .84rem; text-align: center; }
-@media (max-width: 991.98px) { .login-page { grid-template-columns: 1fr; } .login-showcase { min-height: auto; padding: 28px 36px 32px; } .login-showcase-copy, .login-feature-list { display: none; } .login-panel { min-height: calc(100vh - 106px); } }
-@media (max-width: 575.98px) { .login-showcase { padding: 24px; } .login-brand { display: none; } .login-panel { min-height: 100vh; padding: 28px 22px; } .login-mobile-brand { display: block; } .login-card { max-width: 100%; } }
-</style>
